@@ -1,0 +1,26 @@
+# script.filmweb.oceny language file
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+
+#: Settings
+msgctxt "#32000"
+msgid "Login"
+msgstr ""
+
+#: Settings
+msgctxt "#32001"
+msgid "Password"
+msgstr ""
+
+#: Settings
+msgctxt "#32002"
+msgid "Show rating box when stop playing movie"
+msgstr ""
+
+#: Settings
+msgctxt "#32010"
+msgid "Debug"
+msgstr ""
