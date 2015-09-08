@@ -3,44 +3,36 @@
 import xbmc
 import os
 import re
+import json
+import urllib
 
-class Filmweb:
+class Search:
 
     def searchID(self):
-        ret = self.tryThumb()
-        if len(ret) > 0:
-            return ret[0]
-            
-        ret = self.tryFanart()
-        if len(ret) > 0:
-            return ret[0]
-            
-        ret = self.tryNfo()
-        if len(ret) > 0:
-            return ret[0]
-            
-        return ''
         
-    def tryThumb(self):
-        label = xbmc.getInfoLabel('ListItem.Thumb')
-        result = re.findall('fwcdn.pl/po/[^/]+/[^/]+/([0-9]+)/', label)
-        return result
-    
-    def tryFanart(self):
-        label = xbmc.getInfoLabel('ListItem.Art(fanart)')
-        result = re.findall('fwcdn.pl/ph/[^/]+/[^/]+/([0-9]+)/', label)
-        return result
+        if 'movie' in xbmc.getInfoLabel('ListItem.DBTYPE'):
+            movieid = xbmc.getInfoLabel('ListItem.DBID')
+        else:
+            return ''
         
-    def tryTrailer(self):
-        label = xbmc.getInfoLabel('ListItem.Trailer')
-        result = re.findall('mm.filmweb.pl/([0-9]+)/', label)
-        return result
+        jsonGet = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"movieid": ' + movieid + ', "properties": ["file", "art", "trailer"]}, "id": 1}')
+        jsonGet = unicode(jsonGet, 'utf-8', errors='ignore')
+        jsonGetResponse = json.loads(jsonGet)
         
-    def tryNfo(self):
-        filePath = xbmc.getInfoLabel('ListItem.Path')
-        fileName = xbmc.getInfoLabel('ListItem.FileName')
-        fileExt = xbmc.getInfoLabel('ListItem.FileExtension')
-        fileNfo = filePath + fileName.replace(fileExt, 'nfo' )
+        result = re.findall('fwcdn.pl/po/[^/]+/[^/]+/([0-9]+)/', urllib.unquote(str(jsonGetResponse)))
+        if len(result) > 0:
+            return result[0]
+                
+        result = re.findall('fwcdn.pl/ph/[^/]+/[^/]+/([0-9]+)/', urllib.unquote(str(jsonGetResponse)))
+        if len(result) > 0:
+            return result[0]
+                
+        result = re.findall('http://mm.filmweb.pl/([0-9]+)/', urllib.unquote(str(jsonGetResponse)))
+        if len(result) > 0:
+            return result[0]
+                
+        filePath, fileExt = os.path.splitext(jsonGetResponse['result']['moviedetails']['file'])
+        fileNfo = filePath + '.nfo'
         
         if os.path.isfile(fileNfo):
         
@@ -50,19 +42,19 @@ class Filmweb:
             
             result = re.findall('fwcdn.pl/po/[^/]+/[^/]+/([0-9]+)/', file_data)
             if len(result) > 0:
-                return result
+                return result[0]
             
             result = re.findall('fwcdn.pl/ph/[^/]+/[^/]+/([0-9]+)/', file_data)
             if len(result) > 0:
-                return result
+                return result[0]
                 
             result = re.findall('<trailer>http://mm.filmweb.pl/([0-9]+)/', file_data)
             if len(result) > 0:
-                return result
+                return result[0]
                 
             result = re.findall('http://www.filmweb.pl/Film?id=([0-9]+)', file_data)
             if len(result) > 0:
-                return result
+                return result[0]
                 
         return ''
         

@@ -45,10 +45,15 @@ class GUI():
         try:
             filmwebID = str(sys.argv[1])
         except:
-            filmwebID = searchID.Filmweb().searchID()
+            filmwebID = searchID.Search().searchID()
         else:
             if 'false' in __addon__.getSetting('onStopPlaying'):
                 return False
+            
+        try:
+            self.runFromService = str(sys.argv[2])
+        except:
+            self.runFromService = 'false'
             
         if len(filmwebID) == 0:
             debug.debug('Nie mogę znaleźć ID')
@@ -56,8 +61,12 @@ class GUI():
         
         film_vote = filmweb.Filmweb().getUserFilmVotes(filmwebID)
         if film_vote == False:
-            return
+            return False
+        
         debug.debug('Pobrana ocena: ' + film_vote[1])
+        
+        if 'true' in self.runFromService and film_vote[1] != '0' and 'true' in __addon__.getSetting('onlyNotRated'):
+            return False
         
         # display window rating
         display = WindowRating(filmwebID, film_vote[0], int(film_vote[1]))

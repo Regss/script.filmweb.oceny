@@ -21,6 +21,11 @@ msgid "Show rating box when stop playing movie"
 msgstr "Pokazuj ekran oceny po zatrzymaniu odtwarzania filmu"
 
 #: Settings
+msgctxt "#32003"
+msgid "Show only if movie not rated"
+msgstr "Pokaż tylko jeśli film nie był oceniany"
+
+#: Settings
 msgctxt "#32010"
 msgid "Debug"
 msgstr "Debug"

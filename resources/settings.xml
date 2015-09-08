@@ -4,6 +4,7 @@
     <setting label="32001" type="text" id="pass" option="hidden" />
     <setting type="sep" />
     <setting label="32002" type="bool" id="onStopPlaying" default="true" />
+    <setting label="32003" type="bool" id="onlyNotRated" default="false" />
     <setting type="sep" />
     <setting label="32010" type="bool" id="debug" default="false" />
 </settings>

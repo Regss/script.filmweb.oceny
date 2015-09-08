@@ -21,6 +21,11 @@ msgid "Show rating box when stop playing movie"
 msgstr ""
 
 #: Settings
+msgctxt "#32003"
+msgid "Show only if movie not rated"
+msgstr ""
+
+#: Settings
 msgctxt "#32010"
 msgid "Debug"
 msgstr ""

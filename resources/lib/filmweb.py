@@ -35,7 +35,7 @@ class Filmweb:
         # pobranie oceny
         debug.debug('Zalogowano')
         vote_array = {}
-        api_method = 'getUserFilmVotes [null,' + filmwebID + ']\n'.encode('string_escape')
+        api_method = 'getUserFilmVotes [null, null]\n'.encode('string_escape')
         string = self.sendRequest(api_method, 'get')
         matches = re.findall('\[([0-9]+),[^,]+,([0-9]+),', string)
         if len(matches) > 0:
@@ -89,7 +89,7 @@ class Filmweb:
         
         values = { 'methods': api_method, 'signature': self.create_sig(api_method), 'appId': API_ID, 'version': API_VER }
         data = urllib.urlencode(values)
-        print data
+        
         if 'get' in http_method:
             req = urllib2.Request(API_URL + '?' + data)
             
