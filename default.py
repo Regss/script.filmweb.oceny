@@ -59,7 +59,24 @@ class GUI():
             debug.debug('Nie mogę znaleźć ID')
             return False
         
-        film_vote = filmweb.Filmweb().getUserFilmVotes(filmwebID)
+        user = [
+            {'name': __addon__.getSetting('name_u1'), 
+			'login': __addon__.getSetting('login_u1'), 
+            'pass': __addon__.getSetting('pass_u1')}
+        ]
+        
+        if 'true' in __addon__.getSetting('secUser'):
+            user.append(
+                {'name': __addon__.getSetting('name_u2'),
+				'login': __addon__.getSetting('login_u2'),
+                'pass': __addon__.getSetting('pass_u2')}
+            )
+        
+        for userData in user:
+            self.getVotes(filmwebID, userData)
+        
+    def getVotes(self, filmwebID, userData):
+        film_vote = filmweb.Filmweb().getUserFilmVotes(filmwebID, userData)
         if film_vote == False:
             return False
         
@@ -69,13 +86,13 @@ class GUI():
             return False
         
         # display window rating
-        display = WindowRating(filmwebID, film_vote[0], int(film_vote[1]))
+        display = WindowRating(filmwebID, film_vote[0], int(film_vote[1]), userData)
         display.doModal()
         del display
         
 class WindowRating(xbmcgui.WindowDialog):
     
-    def __init__(self, filmwebID, title, rating):
+    def __init__(self, filmwebID, title, rating, userData):
         
         # set window property to true
         self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
@@ -84,23 +101,26 @@ class WindowRating(xbmcgui.WindowDialog):
         # set vars
         self.filmwebID = filmwebID
         self.rating = rating
+        self.userData = userData
         self.button = []
         
         # create window
         bgResW = 520
-        bgResH = 170
+        bgResH = 200
         bgPosX = (1280 - bgResW) / 2
         bgPosY = (720 - bgResH) / 2
         self.bg = xbmcgui.ControlImage(bgPosX, bgPosY, bgResW, bgResH, __path_img__+'//bg.png')
         self.addControl(self.bg)
-        self.labelTitle = xbmcgui.ControlLabel(bgPosX+20, bgPosY+26, bgResW-40, bgResH-40, '[B]Filmweb - oceń film:[/B]', 'font14', '0xFF0084ff',  alignment=2)
+        self.labelName = xbmcgui.ControlLabel(bgPosX+20, bgPosY+22, bgResW-40, bgResH-40, '[B]' + self.userData['name'] + '[/B]', 'font14', '0xFFE60000',  alignment=2)
+        self.addControl(self.labelName)
+        self.labelTitle = xbmcgui.ControlLabel(bgPosX+20, bgPosY+60, bgResW-40, bgResH-40, '[B]Filmweb - oceń film:[/B]', 'font14', '0xFF0084ff',  alignment=2)
         self.addControl(self.labelTitle)
-        self.label = xbmcgui.ControlLabel(bgPosX+20, bgPosY+64, bgResW-40, bgResH-40, title, 'font13', '0xFFFFFFFF',  alignment=2)
+        self.label = xbmcgui.ControlLabel(bgPosX+20, bgPosY+94, bgResW-40, bgResH-40, title, 'font13', '0xFFFFFFFF',  alignment=2)
         self.addControl(self.label)
         
         # create button list
         self.starLeft = bgPosX+40
-        self.starTop = bgPosY+106
+        self.starTop = bgPosY+136
         for i in range(11):
             if i == 0:
                 self.button.append(xbmcgui.ControlButton(self.starLeft, self.starTop, 30, 30, "", focusTexture=__path_img__ + '//star0f.png', noFocusTexture=__path_img__ + '//star0.png'))
@@ -129,7 +149,7 @@ class WindowRating(xbmcgui.WindowDialog):
         # save tag using JSON
         for i in range(11):
             if control == self.button[i]:
-                filmweb.Filmweb().addUserFilmVote(self.filmwebID, str(i))
+                filmweb.Filmweb().addUserFilmVote(self.filmwebID, str(i), self.userData)
                 self.close()
         
 window = xbmcgui.Window(xbmcgui.getCurrentWindowId())

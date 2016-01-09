@@ -18,9 +18,6 @@ __lang__        = __addon__.getLocalizedString
 
 import debug
 
-LOGIN           = __addon__.getSetting('login')
-PASS            = __addon__.getSetting('pass')
-
 API_URL         = 'https://ssl.filmweb.pl/api';
 API_KEY         = 'qjcGhW2JnvGT9dfCt3uT_jozR3s';
 API_ID          = 'android';
@@ -28,7 +25,10 @@ API_VER         = '2.2';
 
 class Filmweb:
             
-    def getUserFilmVotes(self, filmwebID):
+    def getUserFilmVotes(self, filmwebID, userData):
+        
+        self.userData = userData
+    
         if self.login() == False:
             return False
         
@@ -56,7 +56,10 @@ class Filmweb:
         else:
             return [title, '0']
         
-    def addUserFilmVote(self, filmwebID, vote):
+    def addUserFilmVote(self, filmwebID, vote, userData):
+        
+        self.userData = userData
+        
         if self.login() == False:
             return False
         
@@ -71,14 +74,14 @@ class Filmweb:
     def login(self):
         self.login = True
         self.cookie = ''
-        api_method = 'login [' + LOGIN + ',' + PASS + ',1]\n'.encode('string_escape')
+        api_method = 'login [' + self.userData['login'] + ',' + self.userData['pass'] + ',1]\n'.encode('string_escape')
         
         page = self.sendRequest(api_method, 'post')
         self.login = False
         
         if len(re.findall('^err', page)) > 0:
-            debug.debug('Błędny login lub hasło')
-            debug.notify('Błędny login lub hasło')
+            debug.debug(self.userData['name'] + ' - Błędny login lub hasło')
+            debug.notify(self.userData['name'] + ' - Błędny login lub hasło')
             return False
             
     def create_sig(self, methods):

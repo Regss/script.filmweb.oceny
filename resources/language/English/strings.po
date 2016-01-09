@@ -26,6 +26,26 @@ msgid "Show only if movie not rated"
 msgstr ""
 
 #: Settings
+msgctxt "#32004"
+msgid "Enable secound user"
+msgstr ""
+
+#: Settings
+msgctxt "#32005"
+msgid "Name"
+msgstr ""
+
+#: Settings
+msgctxt "#32006"
+msgid "Users"
+msgstr ""
+
+#: Settings
+msgctxt "#32007"
+msgid "Settings"
+msgstr ""
+
+#: Settings
 msgctxt "#32010"
 msgid "Debug"
 msgstr ""

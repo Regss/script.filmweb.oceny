@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <settings>
-    <setting label="32000" type="text" id="login" />
-    <setting label="32001" type="text" id="pass" option="hidden" />
-    <setting type="sep" />
-    <setting label="32002" type="bool" id="onStopPlaying" default="true" />
-    <setting label="32003" type="bool" id="onlyNotRated" default="false" />
-    <setting type="sep" />
-    <setting label="32010" type="bool" id="debug" default="false" />
+    <category label="32006">
+        <setting label="32005" type="text" id="name_u1" default="user 1" />
+        <setting label="32000" type="text" id="login_u1" />
+        <setting label="32001" type="text" id="pass_u1" option="hidden" />
+        <setting type="sep" />
+        <setting label="32004" type="bool" id="secUser" default="false" />
+        <setting label="32005" type="text" id="name_u2" default="user 1" visible="eq(-1,true)" />
+        <setting label="32000" type="text" id="login_u2" visible="eq(-2,true)" />
+        <setting label="32001" type="text" id="pass_u2" option="hidden" visible="eq(-3,true)" />
+    </category>
+    <category label="32007">
+        <setting label="32002" type="bool" id="onStopPlaying" default="true" />
+        <setting label="32003" type="bool" id="onlyNotRated" default="false" />
+        <setting type="sep" />
+        <setting label="32010" type="bool" id="debug" default="false" />
+    </category>
 </settings>
